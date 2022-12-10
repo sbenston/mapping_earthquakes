@@ -15,6 +15,13 @@ let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/sate
 	accessToken: API_KEY
 });
 
+// Create navigation day style tile layer for map
+let day = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-day-v1/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+  attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+  maxZoom: 18,
+  accessToken: API_KEY
+})
+
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [40.7, -94.5],
@@ -25,7 +32,8 @@ let map = L.map('mapid', {
 // Create a base layer that holds all three maps.
 let baseMaps = {
   "Streets": streets,
-  "Satellite": satelliteStreets
+  "Satellite": satelliteStreets,
+  "Navigation Day": day
 };
 
 // 1. Layers for map overlays.
@@ -148,7 +156,8 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
   // Colors based on magnitude using values in line with legend
   function getColor(magnitude) {
     if (magnitude > 6) {
-      return "#fa2020";
+      // Use more saturated red
+      return "#ff2020";
     }
     if (magnitude > 5) {
       return "#ea2c2c";
@@ -159,10 +168,10 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geoj
   // Change marker size based on magnitude
   function getRadius(magnitude) {
     if (magnitude > 6) {
-      return magnitude * 4;
+      return magnitude * 5;
     }
     if (magnitude > 5) {
-      return magnitude * 3.5;
+      return magnitude * 4;
     }
     return magnitude * 3;
   }
